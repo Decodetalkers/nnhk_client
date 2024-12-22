@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -76,8 +75,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.stein.nnhknews.common.Resource
 import com.stein.nnhknews.nhk.NewsView
-import com.stein.nnhknews.nhk.NhKViewModel
 import com.stein.nnhknews.nhk.NhkHtmlModel
+import com.stein.nnhknews.nhk.NhkViewModel
 import com.stein.nnhknews.ui.theme.MahoyinkuimaTheme
 import java.time.Instant
 import java.time.LocalDateTime
@@ -298,7 +297,7 @@ fun NhkNewsList(
         upNavController: NavHostController,
         dp: PaddingValues? = null
 ) {
-    val nhkView: NhKViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    val nhkView: NhkViewModel = viewModel(factory = AppViewModelProvider.Factory)
     val cachedNews by nhkView.cachedValues.collectAsState()
     val state by nhkView.state
     val glModifier =
@@ -317,7 +316,7 @@ fun NhkNewsList(
                                         titleContentColor = MaterialTheme.colorScheme.primary,
                                 ),
                         title = {
-                            Text(nhkView.timeRange, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            Text(nhkView.modelTitle, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         },
                         actions = {
                             IconButton(onClick = { showRangeModal = true }) {

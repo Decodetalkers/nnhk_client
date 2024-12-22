@@ -37,7 +37,7 @@ class NhkHtmlModel : ViewModel() {
         get() = htmlData.value?.m3u8Url
 }
 
-class NhKViewModel(val newsDataBase: NewsDao) : ViewModel() {
+class NhkViewModel(val newsDataBase: NewsDao) : ViewModel() {
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
@@ -50,7 +50,7 @@ class NhKViewModel(val newsDataBase: NewsDao) : ViewModel() {
                             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                             listOf()
                     )
-    var timeRange: String = ""
+    var modelTitle: String = ""
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     init {
         val now = LocalDateTime.now(ZoneOffset.UTC)
@@ -65,7 +65,7 @@ class NhKViewModel(val newsDataBase: NewsDao) : ViewModel() {
         val startDate = start.format(formatter)
         val endDate = end.format(formatter)
 
-        timeRange = "$endDate ~ $startDate"
+        modelTitle = "$endDate ~ $startDate"
     }
 
     fun clearState() {
@@ -92,6 +92,7 @@ class NhKViewModel(val newsDataBase: NewsDao) : ViewModel() {
                 .enqueue(
                         object : Callback {
                             override fun onFailure(call: Call, e: IOException) {
+                                modelTitle = "Sync News Failed"
                                 state.value = Resource.Failure("Unexpected code $e")
                             }
 
@@ -110,6 +111,7 @@ class NhKViewModel(val newsDataBase: NewsDao) : ViewModel() {
 
                                     state.value =
                                             Resource.Failure("request failed ${response.body}")
+                                    modelTitle = "Sync News Failed"
                                 }
                             }
                         }
