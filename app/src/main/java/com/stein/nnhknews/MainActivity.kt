@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -24,6 +25,7 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -212,11 +214,11 @@ fun NhkNewsList(
                             horizontalAlignment = Alignment.CenterHorizontally
                     ) { Text(text = smartCastData.message, fontWeight = FontWeight.Bold) }
             else ->
-                    Column(
-                            modifier = Modifier.padding(padding),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                    ) { Text(text = "Loading....", fontWeight = FontWeight.Bold) }
+                    CircularProgressIndicator(
+                            modifier = Modifier.width(64.dp),
+                            color = MaterialTheme.colorScheme.primary,
+                            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                    )
         }
     }
     if (showRangeModal) {

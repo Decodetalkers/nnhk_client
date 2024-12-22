@@ -32,7 +32,7 @@ fun NhkNews.newsHtml(): String {
         <body>
           <style>
             body {
-              padding-bottom: 40px;
+              padding-bottom: 80px;
             }
             * {
               font-size: 16px;
