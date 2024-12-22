@@ -13,13 +13,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -30,17 +36,22 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -53,8 +64,9 @@ import com.stein.nnhknews.nhk.NewsView
 import com.stein.nnhknews.nhk.NhKViewModel
 import com.stein.nnhknews.nhk.NhkHtmlModel
 import com.stein.nnhknews.ui.theme.MahoyinkuimaTheme
-
-import androidx.compose.runtime.mutableStateOf
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,8 +99,6 @@ fun OverAllView() {
 @Composable
 fun MainView(htmlModel: NhkHtmlModel, upNavController: NavHostController) {
     val navController = rememberNavController()
-    val nhkView: NhKViewModel = viewModel()
-    nhkView.syncNews()
 
     // NOTE: just hack it now
     MaterialTheme {
@@ -96,7 +106,6 @@ fun MainView(htmlModel: NhkHtmlModel, upNavController: NavHostController) {
             NavHost(navController = navController, startDestination = BottomBarScreen.Home.route) {
                 composable(BottomBarScreen.Home.route) {
                     NhkNewsList(
-                            model = nhkView,
                             htmlModel = htmlModel,
                             upNavController = upNavController,
                             dp = padding
@@ -115,36 +124,125 @@ fun MainView(htmlModel: NhkHtmlModel, upNavController: NavHostController) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+// [START android_compose_components_datepicker_range]
+@Composable
+fun DateRangePickerModal(onDateRangeSelected: (Pair<Long?, Long?>) -> Unit, onDismiss: () -> Unit) {
+    val dateRangePickerState = rememberDateRangePickerState()
+
+    DatePickerDialog(
+            onDismissRequest = onDismiss,
+            confirmButton = {
+                TextButton(
+                        onClick = {
+                            onDateRangeSelected(
+                                    Pair(
+                                            dateRangePickerState.selectedStartDateMillis,
+                                            dateRangePickerState.selectedEndDateMillis
+                                    )
+                            )
+                            onDismiss()
+                        }
+                ) { Text("OK") }
+            },
+            dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+    ) {
+        DateRangePicker(
+                state = dateRangePickerState,
+                title = { Text(text = "Select date range") },
+                showModeToggle = false,
+                modifier = Modifier.fillMaxWidth().height(500.dp).padding(16.dp)
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NhkNewsList(
-        model: NhKViewModel,
         htmlModel: NhkHtmlModel,
         upNavController: NavHostController,
         dp: PaddingValues? = null
 ) {
-    val state by model.state
+    val nhkView: NhKViewModel = viewModel()
+    val state by nhkView.state
     val glModifier =
             Modifier.fillMaxSize().let done@{
                 if (dp == null) return@done it
                 it.padding(dp)
             }
-    when (val smartCastData = state) {
-        is Resource.Success ->
-                LazyColumn(modifier = glModifier) {
-                    items(smartCastData.data) { data ->
-                        data.NewsView {
-                            htmlModel.setData(data)
+    var showRangeModal by remember { mutableStateOf(false) }
+    Scaffold(
+            modifier = glModifier,
+            topBar = {
+                CenterAlignedTopAppBar(
+                        colors =
+                                TopAppBarDefaults.centerAlignedTopAppBarColors(
+                                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                        titleContentColor = MaterialTheme.colorScheme.primary,
+                                ),
+                        title = {
+                            Text(nhkView.timeRange, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        },
+                        actions = {
+                            IconButton(onClick = { showRangeModal = true }) {
+                                Icon(
+                                        imageVector = Icons.Filled.Menu,
+                                        contentDescription = "Localized description"
+                                )
+                            }
+                        }
+                )
+            }
+    ) { padding ->
+        when (val smartCastData = state) {
+            is Resource.Success ->
+                    LazyColumn(modifier = Modifier.padding(padding)) {
+                        items(smartCastData.data) { data ->
+                            data.NewsView {
+                                htmlModel.setData(data)
 
-                            upNavController.navigate(OverViewScreen.News.route)
+                                upNavController.navigate(OverViewScreen.News.route)
+                            }
                         }
                     }
-                }
-        else ->
-                Column(
-                        modifier = glModifier,
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                ) { Text(text = "Loading....", fontWeight = FontWeight.Bold) }
+            is Resource.Failure ->
+                    Column(
+                            modifier = Modifier.padding(padding),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                    ) { Text(text = smartCastData.message, fontWeight = FontWeight.Bold) }
+            else ->
+                    Column(
+                            modifier = Modifier.padding(padding),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                    ) { Text(text = "Loading....", fontWeight = FontWeight.Bold) }
+        }
+    }
+    if (showRangeModal) {
+        DateRangePickerModal(
+                onDateRangeSelected = date@{
+                            val (end_l, start_l) = it
+
+                            if (start_l == null || end_l == null) return@date
+                            var start =
+                                    LocalDateTime.ofInstant(
+                                                    Instant.ofEpochMilli(start_l),
+                                                    ZoneId.systemDefault()
+                                            )
+                                            .plusNanos(631_000_000)
+                            val end =
+                                    LocalDateTime.ofInstant(
+                                                    Instant.ofEpochMilli(end_l),
+                                                    ZoneId.systemDefault()
+                                            )
+                                            .plusNanos(631_000_000)
+                            nhkView.clearState()
+                            nhkView.syncNews(start, end)
+                            showRangeModal = false
+                        },
+                onDismiss = { showRangeModal = false }
+        )
     }
 }
 

@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stein.nnhknews.common.Resource
 import java.io.IOException
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
@@ -32,21 +35,44 @@ class NhkHtmlModel : ViewModel() {
 
 class NhKViewModel : ViewModel() {
     val state = mutableStateOf<Resource<List<NhkNews>>>(Resource.Begin)
+    var timeRange: String = ""
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    init {
+        val now = LocalDateTime.now(ZoneOffset.UTC)
 
-    fun clearStatue() {
+        // Calculate yesterday and 7 days ago
+        val sevendayago = now.minusDays(7)
+
+        syncNews(now, sevendayago)
+    }
+
+    private fun genTimeRange(start: LocalDateTime, end: LocalDateTime) {
+        val startDate = start.format(formatter)
+        val endDate = end.format(formatter)
+
+        timeRange = "$endDate ~ $startDate"
+    }
+
+    fun clearState() {
+        val thestate by state
+        if (thestate is Resource.Loading) return
         state.value = Resource.Begin
     }
 
-    fun syncNews() {
+    fun syncNews(start: LocalDateTime, end: LocalDateTime) {
+        genTimeRange(start, end)
         val thestate by state
         if (thestate is Resource.Loading) return
         if (thestate is Resource.Success) return
-        viewModelScope.launch { syncNewsInner().collect { response -> state.value = response } }
+        viewModelScope.launch {
+            syncNewsInner(start, end).collect { response -> state.value = response }
+        }
     }
 
-    private fun syncNewsInner() = flow {
+    private fun syncNewsInner(start: LocalDateTime, end: LocalDateTime) = flow {
         emit(Resource.Loading)
-        val request = requestTodayNews()
+
+        val request = requestNews(start, end)
         client.newCall(request)
                 .enqueue(
                         object : Callback {
@@ -55,11 +81,16 @@ class NhKViewModel : ViewModel() {
                             }
 
                             override fun onResponse(call: Call, response: Response) {
+
                                 if (response.isSuccessful) {
                                     val bodys = response.body!!.string()
 
                                     val objs = Json.decodeFromString<List<NhkNews>>(bodys)
                                     state.value = Resource.Success(objs)
+                                } else {
+
+                                    state.value =
+                                            Resource.Failure("request failed ${response.body}")
                                 }
                             }
                         }

@@ -7,14 +7,10 @@ import okhttp3.*
 
 val isoFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
-fun requestTodayNews(): Request {
-    val now = LocalDateTime.now(ZoneOffset.UTC)
+fun requestNews(begin: LocalDateTime, end: LocalDateTime): Request {
 
-    // Calculate yesterday and 7 days ago
-    val yesterday = now.minusDays(1)
-    val sevenDaysAgo = now.minusDays(7)
-    val yesterdayIso = yesterday.atOffset(ZoneOffset.UTC).format(isoFormatter)
-    val sevenDaysAgoIso = sevenDaysAgo.atOffset(ZoneOffset.UTC).format(isoFormatter)
+    val yesterdayIso = begin.atOffset(ZoneOffset.UTC).format(isoFormatter)
+    val sevenDaysAgoIso = end.atOffset(ZoneOffset.UTC).format(isoFormatter)
     val url =
             HttpUrl.Builder()
                     .scheme("https") // Scheme (https)
