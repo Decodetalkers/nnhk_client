@@ -74,13 +74,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun OverAllView() {
-    val nhkhtml: NhkHtmlModel = viewModel()
+    val nhkHtml: NhkHtmlModel = viewModel()
 
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = OverViewScreen.Main.route) {
-        composable(OverViewScreen.Main.route) { MainView(nhkhtml, navController) }
-        composable(OverViewScreen.News.route) { WebViewScreen(nhkhtml, navController) }
+        composable(OverViewScreen.Main.route) { MainView(nhkHtml, navController) }
+        composable(OverViewScreen.News.route) { WebViewScreen(nhkHtml, navController) }
     }
 }
 
@@ -202,7 +202,7 @@ fun WebViewScreen(nhkHtml: NhkHtmlModel, upNavController: NavHostController) {
                                         // handling our exception.
                                         e.printStackTrace()
                                     }
-                                    playIcon = Icons.Filled.PlayArrow
+                                    playIcon = Icons.Filled.Done
                                 }
                 ) { Icon(playIcon, "Floating action button.") }
             },
