@@ -46,7 +46,7 @@ import androidx.navigation.compose.rememberNavController
 import com.stein.nnhknews.common.Resource
 import com.stein.nnhknews.nhk.NhKViewModel
 import com.stein.nnhknews.nhk.NhkHtmlModel
-import com.stein.nnhknews.nhk.newsView
+import com.stein.nnhknews.nhk.NewsView
 import com.stein.nnhknews.ui.theme.MahoyinkuimaTheme
 
 class MainActivity : ComponentActivity() {
@@ -125,7 +125,7 @@ fun NhkNewsList(
         is Resource.Success ->
                 LazyColumn(modifier = glModifier) {
                     items(smartCastData.data) { data ->
-                        data.newsView {
+                        data.NewsView {
                             htmlModel.setData(data)
 
                             upNavController.navigate(OverViewScreen.News.route)

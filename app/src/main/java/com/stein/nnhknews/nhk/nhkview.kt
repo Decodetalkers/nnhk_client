@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 
 @Composable
-fun NhkNews.newsView(dp: PaddingValues? = null, onClicked: () -> Unit = {}) {
+fun NhkNews.NewsView(dp: PaddingValues? = null, onClicked: () -> Unit = {}) {
     val glModifier =
             Modifier.padding(all = 8.dp).fillMaxSize().let done@{
                 if (dp == null) return@done it
