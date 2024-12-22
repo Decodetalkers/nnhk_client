@@ -1,4 +1,4 @@
-package com.stein.mahoyinkuima
+package com.stein.nnhknews
 
 import android.os.Bundle
 import android.view.ViewGroup
@@ -43,11 +43,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.stein.mahoyinkuima.common.Resource
-import com.stein.mahoyinkuima.nhk.NhKViewModel
-import com.stein.mahoyinkuima.nhk.NhkHtmlModel
-import com.stein.mahoyinkuima.nhk.newsView
-import com.stein.mahoyinkuima.ui.theme.MahoyinkuimaTheme
+import com.stein.nnhknews.common.Resource
+import com.stein.nnhknews.nhk.NhKViewModel
+import com.stein.nnhknews.nhk.NhkHtmlModel
+import com.stein.nnhknews.nhk.newsView
+import com.stein.nnhknews.ui.theme.MahoyinkuimaTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

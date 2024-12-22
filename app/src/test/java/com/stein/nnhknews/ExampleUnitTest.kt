@@ -1,4 +1,4 @@
-package com.stein.mahoyinkuima
+package com.stein.nnhknews
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.stein.mahoyinkuima.ui.theme
+package com.stein.nnhknews.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

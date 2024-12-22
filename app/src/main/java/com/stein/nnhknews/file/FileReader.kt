@@ -1,4 +1,4 @@
-package com.stein.mahoyinkuima.file
+package com.stein.nnhknews.file
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,7 +9,7 @@ import java.io.FileInputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.stein.mahoyinkuima.common.Resource
+import com.stein.nnhknews.common.Resource
 
 const val UpdateTimeFile = "/proc/uptime"
 const val CpuInfo = "/proc/cpuinfo"

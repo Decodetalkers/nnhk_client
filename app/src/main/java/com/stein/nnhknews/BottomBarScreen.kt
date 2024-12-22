@@ -1,4 +1,4 @@
-package com.stein.mahoyinkuima
+package com.stein.nnhknews
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home

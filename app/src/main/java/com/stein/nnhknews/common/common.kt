@@ -1,4 +1,4 @@
-package com.stein.mahoyinkuima.common
+package com.stein.nnhknews.common
 
 sealed class Resource<out T> {
     data object Loading : Resource<Nothing>()

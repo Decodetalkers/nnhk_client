@@ -10,11 +10,11 @@ plugins {
 }
 
 android {
-    namespace = "com.stein.mahoyinkuima"
+    namespace = "com.stein.nnhknews"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.stein.mahoyinkuima"
+        applicationId = "com.stein.nnhknews"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

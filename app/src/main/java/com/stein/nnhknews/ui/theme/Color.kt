@@ -1,4 +1,4 @@
-package com.stein.mahoyinkuima.ui.theme
+package com.stein.nnhknews.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

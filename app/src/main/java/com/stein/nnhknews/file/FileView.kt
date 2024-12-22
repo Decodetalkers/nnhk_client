@@ -1,4 +1,4 @@
-package com.stein.mahoyinkuima.file
+package com.stein.nnhknews.file
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

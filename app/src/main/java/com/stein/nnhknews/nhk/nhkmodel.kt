@@ -1,10 +1,10 @@
-package com.stein.mahoyinkuima.nhk
+package com.stein.nnhknews.nhk
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stein.mahoyinkuima.common.Resource
+import com.stein.nnhknews.common.Resource
 import java.io.IOException
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch

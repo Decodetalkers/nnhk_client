@@ -1,4 +1,4 @@
-package com.stein.mahoyinkuima.nhk
+package com.stein.nnhknews.nhk
 
 import kotlinx.serialization.*
 

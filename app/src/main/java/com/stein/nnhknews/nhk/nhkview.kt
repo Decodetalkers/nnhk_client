@@ -1,4 +1,4 @@
-package com.stein.mahoyinkuima.nhk
+package com.stein.nnhknews.nhk
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
