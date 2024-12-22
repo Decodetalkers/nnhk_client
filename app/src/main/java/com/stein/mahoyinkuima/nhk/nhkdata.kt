@@ -51,7 +51,7 @@ const val EMPTY_HTML =
 
 fun NhkNews.newsHtml(): String {
     var image = ""
-    if (image == "") {
+    if (imageUrl != "") {
         image = "<img src=${imageUrl} />"
     }
 
