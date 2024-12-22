@@ -5,12 +5,11 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import okhttp3.*
 
-val isoFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+val nhkFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
 
 fun requestNews(begin: LocalDateTime, end: LocalDateTime): Request {
-
-    val yesterdayIso = begin.atOffset(ZoneOffset.UTC).format(isoFormatter)
-    val sevenDaysAgoIso = end.atOffset(ZoneOffset.UTC).format(isoFormatter)
+    val yesterdayIso = begin.atOffset(ZoneOffset.UTC).format(nhkFormatter)
+    val sevenDaysAgoIso = end.atOffset(ZoneOffset.UTC).format(nhkFormatter)
     val url =
             HttpUrl.Builder()
                     .scheme("https") // Scheme (https)
