@@ -26,6 +26,8 @@ class NhkHtmlModel : ViewModel() {
         get() = htmlData.value?.newsHtml() ?: ""
     val title: String
         get() = htmlData.value?.title ?: ""
+    val audioUrl: String?
+        get() = htmlData.value?.m3u8Url
 }
 
 class NhKViewModel : ViewModel() {

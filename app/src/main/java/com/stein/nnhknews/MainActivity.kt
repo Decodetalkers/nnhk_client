@@ -1,5 +1,7 @@
 package com.stein.nnhknews
 
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.ViewGroup
 import android.webkit.WebView
@@ -16,7 +18,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -44,10 +49,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.stein.nnhknews.common.Resource
+import com.stein.nnhknews.nhk.NewsView
 import com.stein.nnhknews.nhk.NhKViewModel
 import com.stein.nnhknews.nhk.NhkHtmlModel
-import com.stein.nnhknews.nhk.NewsView
 import com.stein.nnhknews.ui.theme.MahoyinkuimaTheme
+
+import androidx.compose.runtime.mutableStateOf
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -149,10 +156,56 @@ fun DefaultPreview() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WebViewScreen(nhkhtml: NhkHtmlModel, upNavController: NavHostController) {
-    val HTMLstring = nhkhtml.html
-    val title = nhkhtml.title
+fun WebViewScreen(nhkHtml: NhkHtmlModel, upNavController: NavHostController) {
+    val mediaPlayer = MediaPlayer()
+    val htmlString = nhkHtml.html
+    val title = nhkHtml.title
+    val audioUrl = nhkHtml.audioUrl
+    var playIcon by remember { mutableStateOf(Icons.Filled.PlayArrow) }
+
     Scaffold(
+            floatingActionButton = {
+                FloatingActionButton(
+                        onClick = play@{
+                                    if (audioUrl == null) return@play
+                                    if (mediaPlayer.isPlaying) {
+                                        playIcon = Icons.Filled.Done
+                                        mediaPlayer.stop()
+                                        mediaPlayer.reset()
+                                        return@play
+                                    }
+                                    mediaPlayer.setAudioAttributes(
+                                            AudioAttributes.Builder()
+                                                    .setContentType(
+                                                            AudioAttributes.CONTENT_TYPE_MUSIC
+                                                    )
+                                                    .build()
+                                    )
+
+                                    // on below line we are running a try and catch block
+                                    // for our media player.
+                                    try {
+                                        // on below line we are setting audio source
+                                        // as audio url on below line.
+                                        mediaPlayer.setDataSource(audioUrl)
+
+                                        // on below line we are preparing
+                                        // our media player.
+                                        mediaPlayer.prepare()
+
+                                        // on below line we are starting
+                                        // our media player.
+                                        mediaPlayer.start()
+                                    } catch (e: Exception) {
+
+                                        // on below line we are
+                                        // handling our exception.
+                                        e.printStackTrace()
+                                    }
+                                    playIcon = Icons.Filled.PlayArrow
+                                }
+                ) { Icon(playIcon, "Floating action button.") }
+            },
             topBar = {
                 TopAppBar(
                         colors =
@@ -162,7 +215,14 @@ fun WebViewScreen(nhkhtml: NhkHtmlModel, upNavController: NavHostController) {
                                 ),
                         title = { Text(text = title) },
                         navigationIcon = {
-                            IconButton(onClick = { upNavController.navigateUp() }) {
+                            IconButton(
+                                    onClick = {
+                                        mediaPlayer.stop()
+                                        mediaPlayer.reset()
+                                        mediaPlayer.release()
+                                        upNavController.navigateUp()
+                                    }
+                            ) {
                                 Icon(
                                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                         contentDescription = "Localized description"
@@ -184,7 +244,7 @@ fun WebViewScreen(nhkhtml: NhkHtmlModel, upNavController: NavHostController) {
                         }
                     },
                     update = {
-                        it.loadDataWithBaseURL(null, HTMLstring, "text/html", "utf-8", null)
+                        it.loadDataWithBaseURL(null, htmlString, "text/html", "utf-8", null)
                     }
             )
         }
