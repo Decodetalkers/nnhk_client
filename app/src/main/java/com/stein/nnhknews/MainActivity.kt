@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,6 +50,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -296,7 +298,8 @@ fun NhkNewsList(
         upNavController: NavHostController,
         dp: PaddingValues? = null
 ) {
-    val nhkView: NhKViewModel = viewModel()
+    val nhkView: NhKViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    val cachedNews by nhkView.cachedValues.collectAsState()
     val state by nhkView.state
     val glModifier =
             Modifier.fillMaxSize().let done@{
@@ -339,11 +342,23 @@ fun NhkNewsList(
                         }
                     }
             is Resource.Failure ->
-                    Column(
-                            modifier = Modifier.padding(padding),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                    ) { Text(text = smartCastData.message, fontWeight = FontWeight.Bold) }
+                    if (cachedNews.isEmpty()) {
+                        Column(
+                                modifier = Modifier.padding(padding),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                        ) { Text(text = smartCastData.message, fontWeight = FontWeight.Bold) }
+                    } else {
+                        LazyColumn(modifier = Modifier.padding(padding)) {
+                            items(cachedNews) { data ->
+                                data.NewsView {
+                                    htmlModel.setData(data)
+
+                                    upNavController.navigate(OverViewScreen.News.route)
+                                }
+                            }
+                        }
+                    }
             else ->
                     CircularProgressIndicator(
                             modifier = Modifier.width(64.dp),

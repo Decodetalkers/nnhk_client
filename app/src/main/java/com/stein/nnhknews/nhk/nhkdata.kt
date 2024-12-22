@@ -1,10 +1,13 @@
 package com.stein.nnhknews.nhk
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.serialization.*
 
+@Entity(tableName = "news")
 @Serializable
 data class NhkNews(
-        val newsId: String,
+        @PrimaryKey val newsId: String,
         val title: String,
         val titleWithRuby: String,
         val outline: String,
