@@ -28,7 +28,7 @@ fun NhkNews.newsView(dp: PaddingValues? = null, onClicked: () -> Unit = {}) {
                     contentDescription = "image",
                     modifier = Modifier.width(120.dp).height(100.dp)
             )
-            Text(title)
+            Text(text = title, modifier = Modifier.padding(10.dp))
         }
     }
 }

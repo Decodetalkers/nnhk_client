@@ -88,7 +88,7 @@ fun MainView(htmlModel: NhkHtmlModel, upNavController: NavHostController) {
         Scaffold(bottomBar = { BottomBar(navController) }) { padding ->
             NavHost(navController = navController, startDestination = BottomBarScreen.Home.route) {
                 composable(BottomBarScreen.Home.route) {
-                    NhkPackage(
+                    NhkNewsList(
                             model = nhkView,
                             htmlModel = htmlModel,
                             upNavController = upNavController,
@@ -109,7 +109,7 @@ fun MainView(htmlModel: NhkHtmlModel, upNavController: NavHostController) {
 }
 
 @Composable
-fun NhkPackage(
+fun NhkNewsList(
         model: NhKViewModel,
         htmlModel: NhkHtmlModel,
         upNavController: NavHostController,
