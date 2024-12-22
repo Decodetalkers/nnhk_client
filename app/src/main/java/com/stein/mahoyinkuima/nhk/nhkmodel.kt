@@ -17,11 +17,15 @@ import okhttp3.Response
 private val client = OkHttpClient()
 
 class NhkHtmlModel : ViewModel() {
-    val htmlData = mutableStateOf<String>(EMPTY_HTML)
+    val htmlData = mutableStateOf<NhkNews?>(null)
 
-    fun setData(data: String) {
+    fun setData(data: NhkNews) {
         htmlData.value = data
     }
+    val html: String
+        get() = htmlData.value?.newsHtml() ?: ""
+    val title: String
+        get() = htmlData.value?.title ?: ""
 }
 
 class NhKViewModel : ViewModel() {
