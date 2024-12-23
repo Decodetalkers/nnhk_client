@@ -113,6 +113,7 @@ fun OverAllView() {
 @Composable
 fun MainView(htmlModel: NhkHtmlModel, upNavController: NavHostController) {
     val navController = rememberNavController()
+    val nhkViewModel: NhkViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
     // NOTE: just hack it now
     MaterialTheme {
@@ -120,6 +121,7 @@ fun MainView(htmlModel: NhkHtmlModel, upNavController: NavHostController) {
             NavHost(navController = navController, startDestination = BottomBarScreen.Home.route) {
                 composable(BottomBarScreen.Home.route) {
                     NhkNewsList(
+                            nhkViewModel = nhkViewModel,
                             htmlModel = htmlModel,
                             upNavController = upNavController,
                             dp = padding
@@ -293,13 +295,13 @@ fun DateRangePickerModal(onDateRangeSelected: (Pair<Long?, Long?>) -> Unit, onDi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NhkNewsList(
-        htmlModel: NhkHtmlModel,
-        upNavController: NavHostController,
-        dp: PaddingValues? = null
+    nhkViewModel: NhkViewModel,
+    htmlModel: NhkHtmlModel,
+    upNavController: NavHostController,
+    dp: PaddingValues? = null
 ) {
-    val nhkView: NhkViewModel = viewModel(factory = AppViewModelProvider.Factory)
-    val cachedNews by nhkView.cachedValues.collectAsState()
-    val state by nhkView.state
+    val cachedNews by nhkViewModel.cachedValues.collectAsState()
+    val state by nhkViewModel.state
     val glModifier =
             Modifier.fillMaxSize().let done@{
                 if (dp == null) return@done it
@@ -316,7 +318,7 @@ fun NhkNewsList(
                                         titleContentColor = MaterialTheme.colorScheme.primary,
                                 ),
                         title = {
-                            Text(nhkView.modelTitle, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            Text(nhkViewModel.modelTitle, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         },
                         actions = {
                             IconButton(onClick = { showRangeModal = true }) {
@@ -382,8 +384,8 @@ fun NhkNewsList(
                                                     Instant.ofEpochMilli(end_l),
                                                     ZoneId.systemDefault()
                                             )
-                            nhkView.clearState()
-                            nhkView.syncNews(start, end)
+                            nhkViewModel.clearState()
+                            nhkViewModel.syncNews(start, end)
                             showRangeModal = false
                         },
                 onDismiss = { showRangeModal = false }
