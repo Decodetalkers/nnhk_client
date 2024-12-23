@@ -46,7 +46,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: Signed app bundle
-          path: app/build/outputs/apk/release/*-release-signed.apk
+          path: ${{steps.sign_app.outputs.signedFile}}
   release:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
