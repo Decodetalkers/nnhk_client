@@ -156,7 +156,6 @@ fun AboutPage(dp: PaddingValues? = null) {
                                     text = "About",
                                     modifier = Modifier.fillMaxWidth().padding(all = 10.dp),
                                     fontSize = 30.sp,
-                                    color = Color.Black,
                                     fontWeight = FontWeight.Bold,
                                     textAlign = TextAlign.Right
                             )
