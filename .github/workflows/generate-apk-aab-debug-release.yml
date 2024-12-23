@@ -43,7 +43,7 @@ jobs:
           buildToolsVersion: 33.0.0
 
       # Upload your signed file if you want
-      - uses: actions/upload-artifact@vv
+      - uses: actions/upload-artifact@v4
         with:
           name: Signed app bundle
           path: app/build/outputs/apk/release/*-release-signed.apk
