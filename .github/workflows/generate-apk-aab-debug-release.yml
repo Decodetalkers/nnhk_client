@@ -1,12 +1,5 @@
 name: Generated APK AAB (Upload - Create Artifact To Github Action)
 
-env:
-  # The name of the main module repository
-  main_project_module: popandpipi
-
-  # The name of the Play Store
-  playstore_name: PopAndPipi
-
 on:
 
   push:
@@ -24,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
       - uses: ilharp/sign-android-release@v1 # Or use @nightly
         name: Sign app APK
         id: sign_app
