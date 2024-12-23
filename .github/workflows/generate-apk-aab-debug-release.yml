@@ -63,7 +63,7 @@ jobs:
       - name: Copy files
         run: |
           mkdir out
-          mv release/*-release-unsigned.apk  out/nnhk-release.apk
+          mv */*-signed.apk  out/nnhk-release.apk
           cd out
           sha256sum * > sha256sum
       - name: Release
