@@ -377,13 +377,11 @@ fun NhkNewsList(
                                                     Instant.ofEpochMilli(start_l),
                                                     ZoneId.systemDefault()
                                             )
-                                            .plusNanos(631_000_000)
                             val end =
                                     LocalDateTime.ofInstant(
                                                     Instant.ofEpochMilli(end_l),
                                                     ZoneId.systemDefault()
                                             )
-                                            .plusNanos(631_000_000)
                             nhkView.clearState()
                             nhkView.syncNews(start, end)
                             showRangeModal = false
