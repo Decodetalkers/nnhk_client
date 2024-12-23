@@ -1,6 +1,7 @@
 package com.stein.nnhknews.nhk
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
@@ -50,6 +52,47 @@ fun NhkNews.NewsView(dp: PaddingValues? = null, onClicked: () -> Unit = {}) {
             )
             Column {
                 Text(text = title, modifier = Modifier.padding(10.dp))
+                Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.BottomEnd // Aligns the text to the end
+                ) {
+                    Text(
+                            text = formatDateTime(publishedAtUtc),
+                            modifier = Modifier.padding(6.dp),
+                            fontSize = 15.sp
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun NhkNews.NewsViewColumn(dp: PaddingValues? = null, onClicked: () -> Unit = {}) {
+    val glModifier =
+            Modifier.padding(all = 8.dp).fillMaxSize().let done@{
+                if (dp == null) return@done it
+                it.padding(dp)
+            }
+    Card(modifier = glModifier.clickable { onClicked() }) {
+        Column {
+            Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center // Aligns the text to the end
+            ) {
+                AsyncImage(
+                        model = imageUrl,
+                        contentDescription = "image",
+                        modifier = Modifier.width(140.dp).height(100.dp)
+                )
+            }
+            Column(modifier = Modifier.height(125.dp), verticalArrangement = Arrangement.Bottom) {
+                Text(
+                        text = title,
+                        modifier = Modifier.padding(10.dp),
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
+                )
                 Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.BottomEnd // Aligns the text to the end

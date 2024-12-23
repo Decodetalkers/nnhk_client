@@ -23,6 +23,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -61,7 +64,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -78,8 +83,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.stein.nnhknews.common.Resource
 import com.stein.nnhknews.nhk.NewsView
+import com.stein.nnhknews.nhk.NewsViewColumn
 import com.stein.nnhknews.nhk.NhkHtmlModel
+import com.stein.nnhknews.nhk.NhkNews
 import com.stein.nnhknews.nhk.NhkViewModel
+import com.stein.nnhknews.settings.DessertReleaseViewModel
 import com.stein.nnhknews.ui.theme.MahoyinkuimaTheme
 import java.time.Instant
 import java.time.LocalDateTime
@@ -118,12 +126,15 @@ fun MainView(htmlModel: NhkHtmlModel, upNavController: NavHostController) {
     val navController = rememberNavController()
     val nhkViewModel: NhkViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
+    val settingsViewModel: DessertReleaseViewModel =
+            viewModel(factory = AppViewModelProvider.Factory)
     // NOTE: just hack it now
     MaterialTheme {
         Scaffold(bottomBar = { BottomBar(navController) }) { padding ->
             NavHost(navController = navController, startDestination = BottomBarScreen.Home.route) {
                 composable(BottomBarScreen.Home.route) {
                     NhkNewsList(
+                            settingViewModel = settingsViewModel,
                             nhkViewModel = nhkViewModel,
                             htmlModel = htmlModel,
                             upNavController = upNavController,
@@ -317,14 +328,56 @@ fun NetworkErrorPreview() {
     NetworkError(error = "network error")
 }
 
+@Composable
+fun NewsCard(
+        modifier: Modifier,
+        htmlModel: NhkHtmlModel,
+        upNavController: NavHostController,
+        isLinearLayout: Boolean,
+        news: List<NhkNews>
+) {
+
+    if (isLinearLayout) {
+        LazyColumn(modifier = modifier) {
+            items(news) { data ->
+                data.NewsView {
+                    htmlModel.setData(data)
+
+                    upNavController.navigate(OverViewScreen.News.route)
+                }
+            }
+        }
+    } else {
+        LazyVerticalGrid(
+                modifier = modifier,
+                columns = GridCells.Fixed(2),
+                verticalArrangement =
+                        Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+                horizontalArrangement =
+                        Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
+        ) {
+            items(news) { data ->
+                data.NewsViewColumn {
+                    htmlModel.setData(data)
+
+                    upNavController.navigate(OverViewScreen.News.route)
+                }
+            }
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NhkNewsList(
+        settingViewModel: DessertReleaseViewModel,
         nhkViewModel: NhkViewModel,
         htmlModel: NhkHtmlModel,
         upNavController: NavHostController,
         dp: PaddingValues? = null
 ) {
+    val uiState = settingViewModel.uiState.collectAsState().value
+    val isLinearLayout = uiState.isLinearLayout
     val cachedNews by nhkViewModel.cachedValues.collectAsState()
     val state by nhkViewModel.state
     val glModifier =
@@ -350,6 +403,16 @@ fun NhkNewsList(
                             )
                         },
                         actions = {
+                            IconButton(
+                                    onClick = { settingViewModel.selectLayout(!isLinearLayout) }
+                            ) {
+                                Icon(
+                                        painter = painterResource(uiState.toggleIcon),
+                                        contentDescription =
+                                                stringResource(uiState.toggleContentDescription),
+                                        tint = MaterialTheme.colorScheme.onBackground
+                                )
+                            }
                             IconButton(onClick = { showRangeModal = true }) {
                                 Icon(
                                         imageVector = Icons.Filled.Menu,
@@ -362,15 +425,13 @@ fun NhkNewsList(
     ) { padding ->
         when (val smartCastData = state) {
             is Resource.Success ->
-                    LazyColumn(modifier = Modifier.padding(padding)) {
-                        items(smartCastData.data) { data ->
-                            data.NewsView {
-                                htmlModel.setData(data)
-
-                                upNavController.navigate(OverViewScreen.News.route)
-                            }
-                        }
-                    }
+                    NewsCard(
+                            modifier = Modifier.padding(padding),
+                            news = smartCastData.data,
+                            htmlModel = htmlModel,
+                            isLinearLayout = isLinearLayout,
+                            upNavController = upNavController
+                    )
             is Resource.Failure ->
                     if (cachedNews.isEmpty()) {
                         Column(
@@ -379,15 +440,13 @@ fun NhkNewsList(
                                 horizontalAlignment = Alignment.CenterHorizontally
                         ) { Text(text = smartCastData.message, fontWeight = FontWeight.Bold) }
                     } else {
-                        LazyColumn(modifier = Modifier.padding(padding)) {
-                            items(cachedNews) { data ->
-                                data.NewsView {
-                                    htmlModel.setData(data)
-
-                                    upNavController.navigate(OverViewScreen.News.route)
-                                }
-                            }
-                        }
+                        NewsCard(
+                                modifier = Modifier.padding(padding),
+                                news = cachedNews,
+                                htmlModel = htmlModel,
+                                isLinearLayout = isLinearLayout,
+                                upNavController = upNavController
+                        )
                     }
             else ->
                     CircularProgressIndicator(
@@ -420,12 +479,6 @@ fun NhkNewsList(
                 onDismiss = { showRangeModal = false }
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    MahoyinkuimaTheme { /*Greeting("Android") */}
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
