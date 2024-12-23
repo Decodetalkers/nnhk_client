@@ -19,5 +19,6 @@ fun requestNews(begin: LocalDateTime, end: LocalDateTime): Request {
                     .addQueryParameter("endDate", yesterdayIso) // Query parameter
                     .build()
 
+    println(url)
     return Request.Builder().url(url).build()
 }

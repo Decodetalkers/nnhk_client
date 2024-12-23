@@ -261,7 +261,6 @@ fun DialogLicense(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-// [START android_compose_components_datepicker_range]
 @Composable
 fun DateRangePickerModal(onDateRangeSelected: (Pair<Long?, Long?>) -> Unit, onDismiss: () -> Unit) {
     val dateRangePickerState = rememberDateRangePickerState()
@@ -285,9 +284,9 @@ fun DateRangePickerModal(onDateRangeSelected: (Pair<Long?, Long?>) -> Unit, onDi
     ) {
         DateRangePicker(
                 state = dateRangePickerState,
-                title = { Text(text = "Select date range") },
+                title = { },
                 showModeToggle = false,
-                modifier = Modifier.fillMaxWidth().height(500.dp).padding(16.dp)
+                modifier = Modifier.fillMaxWidth().height(500.dp)
         )
     }
 }
