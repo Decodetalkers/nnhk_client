@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -58,7 +59,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -284,20 +287,44 @@ fun DateRangePickerModal(onDateRangeSelected: (Pair<Long?, Long?>) -> Unit, onDi
     ) {
         DateRangePicker(
                 state = dateRangePickerState,
-                title = { },
+                title = {},
                 showModeToggle = false,
                 modifier = Modifier.fillMaxWidth().height(500.dp)
         )
     }
 }
 
+@Composable
+fun NetworkError(padding: PaddingValues = PaddingValues(all = 0.dp), error: String) {
+    Column(
+            modifier = Modifier.padding(padding).fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = error, fontWeight = FontWeight.Bold, fontSize = 30.sp, color = Color.DarkGray)
+
+        Image(
+                painterResource(R.drawable.error),
+                contentDescription = "",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.width(30.dp).height(30.dp)
+        )
+    }
+}
+
+@Preview
+@Composable
+fun NetworkErrorPreview() {
+    NetworkError(error = "network error")
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NhkNewsList(
-    nhkViewModel: NhkViewModel,
-    htmlModel: NhkHtmlModel,
-    upNavController: NavHostController,
-    dp: PaddingValues? = null
+        nhkViewModel: NhkViewModel,
+        htmlModel: NhkHtmlModel,
+        upNavController: NavHostController,
+        dp: PaddingValues? = null
 ) {
     val cachedNews by nhkViewModel.cachedValues.collectAsState()
     val state by nhkViewModel.state
@@ -317,7 +344,11 @@ fun NhkNewsList(
                                         titleContentColor = MaterialTheme.colorScheme.primary,
                                 ),
                         title = {
-                            Text(nhkViewModel.modelTitle, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            Text(
+                                    nhkViewModel.modelTitle,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                            )
                         },
                         actions = {
                             IconButton(onClick = { showRangeModal = true }) {
@@ -375,14 +406,14 @@ fun NhkNewsList(
                             if (start_l == null || end_l == null) return@date
                             var start =
                                     LocalDateTime.ofInstant(
-                                                    Instant.ofEpochMilli(start_l),
-                                                    ZoneId.systemDefault()
-                                            )
+                                            Instant.ofEpochMilli(start_l),
+                                            ZoneId.systemDefault()
+                                    )
                             val end =
                                     LocalDateTime.ofInstant(
-                                                    Instant.ofEpochMilli(end_l),
-                                                    ZoneId.systemDefault()
-                                            )
+                                            Instant.ofEpochMilli(end_l),
+                                            ZoneId.systemDefault()
+                                    )
                             nhkViewModel.clearState()
                             nhkViewModel.syncNews(start, end)
                             showRangeModal = false
