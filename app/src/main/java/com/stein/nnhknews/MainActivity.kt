@@ -406,7 +406,7 @@ fun NhkNewsList(
                             }
                             IconButton(onClick = { showRangeModal = true }) {
                                 Icon(
-                                        painter = painterResource(R.drawable.calandar),
+                                        painter = painterResource(R.drawable.calendar),
                                         contentDescription = "Localized description",
                                         modifier = Modifier.size(width = 25.dp, height = 25.dp)
                                 )
