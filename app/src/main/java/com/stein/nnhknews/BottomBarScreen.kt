@@ -1,15 +1,10 @@
 package com.stein.nnhknews
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.ui.graphics.vector.ImageVector
-
-sealed class BottomBarScreen(val route: String, val title: String, val icon: ImageVector) {
-    data object Home : BottomBarScreen(route = "NEWS", title = "NEWS", icon = Icons.Default.Home)
+sealed class BottomBarScreen(val route: String, val title: Int, val icon: Int) {
+    data object Home : BottomBarScreen(route = "NEWS", title = R.string.news, icon = R.drawable.news)
 
     data object About :
-            BottomBarScreen(route = "ABOUT", title = "ABOUT", icon = Icons.Default.Settings)
+            BottomBarScreen(route = "ABOUT", title = R.string.about, icon = R.drawable.about)
 }
 
 sealed class OverViewScreen(val route: String) {

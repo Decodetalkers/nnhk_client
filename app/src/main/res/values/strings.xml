@@ -5,4 +5,6 @@
     <string name="linear_layout_toggle">Linear layout</string>
     <string name="OK">OK</string>
     <string name="Cancel">Cancel</string>
+    <string name="news">News</string>
+    <string name="about">About</string>
 </resources>

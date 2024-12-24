@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -30,9 +31,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -292,7 +290,9 @@ fun DateRangePickerModal(onDateRangeSelected: (Pair<Long?, Long?>) -> Unit, onDi
                         }
                 ) { Text(stringResource(R.string.OK)) }
             },
-            dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.Cancel)) } }
+            dismissButton = {
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.Cancel)) }
+            }
     ) {
         DateRangePicker(
                 state = dateRangePickerState,
@@ -414,8 +414,9 @@ fun NhkNewsList(
                             }
                             IconButton(onClick = { showRangeModal = true }) {
                                 Icon(
-                                        imageVector = Icons.Filled.Menu,
-                                        contentDescription = "Localized description"
+                                        painter = painterResource(R.drawable.calandar),
+                                        contentDescription = "Localized description",
+                                        modifier = Modifier.size(width = 25.dp, height = 25.dp)
                                 )
                             }
                         }
@@ -487,7 +488,7 @@ fun WebViewScreen(nhkHtml: NhkHtmlModel, upNavController: NavHostController) {
     val htmlString = nhkHtml.html
     val title = nhkHtml.title
     val audioUrl = nhkHtml.audioUrl
-    var playIcon by remember { mutableStateOf(Icons.Filled.PlayArrow) }
+    var playIcon by remember { mutableIntStateOf(R.drawable.play) }
 
     Scaffold(
             floatingActionButton = {
@@ -495,7 +496,7 @@ fun WebViewScreen(nhkHtml: NhkHtmlModel, upNavController: NavHostController) {
                         onClick = play@{
                                     if (audioUrl == null) return@play
                                     if (mediaPlayer.isPlaying) {
-                                        playIcon = Icons.Filled.Done
+                                        playIcon = R.drawable.play
                                         mediaPlayer.stop()
                                         mediaPlayer.reset()
                                         return@play
@@ -528,9 +529,15 @@ fun WebViewScreen(nhkHtml: NhkHtmlModel, upNavController: NavHostController) {
                                         // handling our exception.
                                         e.printStackTrace()
                                     }
-                                    playIcon = Icons.Filled.Done
+                                    playIcon = R.drawable.pause
                                 }
-                ) { Icon(playIcon, "Floating action button.") }
+                ) {
+                    Icon(
+                            painter = painterResource(playIcon),
+                            contentDescription = "Floating action button.",
+                            modifier = Modifier.size(width = 30.dp, height = 30.dp)
+                    )
+                }
             },
             topBar = {
                 TopAppBar(
@@ -610,8 +617,14 @@ fun RowScope.AddItem(
         navController: NavHostController
 ) {
     NavigationBarItem(
-            label = { Text(text = screen.title) },
-            icon = { Icon(imageVector = screen.icon, contentDescription = "Navigation Icon") },
+            label = { Text(text = stringResource(screen.title)) },
+            icon = {
+                Icon(
+                        painter = painterResource(screen.icon),
+                        contentDescription = "Navigation Icon",
+                        modifier = Modifier.size(width = 25.dp, height = 25.dp)
+                )
+            },
             selected = isSelected,
             onClick = { navController.navigate(screen.route) }
     )
