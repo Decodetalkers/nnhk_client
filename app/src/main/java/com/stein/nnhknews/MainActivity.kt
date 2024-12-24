@@ -113,7 +113,10 @@ fun OverAllView() {
 
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = OverViewScreen.Main.route) {
+    NavHost(
+            navController = navController,
+            startDestination = OverViewScreen.Main.route,
+    ) {
         composable(OverViewScreen.Main.route) { MainView(nhkHtml, navController) }
         composable(OverViewScreen.News.route) { WebViewScreen(nhkHtml, navController) }
     }
@@ -126,36 +129,29 @@ fun MainView(htmlModel: NhkHtmlModel, upNavController: NavHostController) {
 
     val settingsViewModel: DessertReleaseViewModel =
             viewModel(factory = AppViewModelProvider.Factory)
-    MaterialTheme {
-        Scaffold(bottomBar = { BottomBar(navController) }) { padding ->
-            NavHost(navController = navController, startDestination = BottomBarScreen.Home.route) {
-                composable(BottomBarScreen.Home.route) {
-                    NhkNewsList(
-                            settingViewModel = settingsViewModel,
-                            nhkViewModel = nhkViewModel,
-                            htmlModel = htmlModel,
-                            upNavController = upNavController,
-                            dp = padding
-                    )
-                }
 
-                composable(BottomBarScreen.About.route) { AboutPage(padding) }
-            }
+    NavHost(navController = navController, startDestination = BottomBarScreen.Home.route) {
+        composable(BottomBarScreen.Home.route) {
+            NhkNewsList(
+                    settingViewModel = settingsViewModel,
+                    nhkViewModel = nhkViewModel,
+                    htmlModel = htmlModel,
+                    upNavController = upNavController,
+                    navController = navController
+            )
         }
+
+        composable(BottomBarScreen.About.route) { AboutPage(navController) }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutPage(dp: PaddingValues? = null) {
+fun AboutPage(navController: NavHostController) {
     var showDialog by remember { mutableStateOf(false) }
     val uriHandler = LocalUriHandler.current
     val remoteUrl = "https://github.com/Decodetalkers/nnhk_client"
-    val modifier =
-            Modifier.fillMaxSize().let done@{
-                if (dp == null) return@done it
-                it.padding(dp)
-            }
+
     Scaffold(
             topBar = {
                 TopAppBar(
@@ -170,7 +166,7 @@ fun AboutPage(dp: PaddingValues? = null) {
                         }
                 )
             },
-            modifier = modifier,
+            bottomBar = { BottomBar(navController) }
     ) { padding ->
         Column(
                 modifier = Modifier.padding(padding).fillMaxHeight().padding(all = 30.dp),
@@ -373,20 +369,16 @@ fun NhkNewsList(
         nhkViewModel: NhkViewModel,
         htmlModel: NhkHtmlModel,
         upNavController: NavHostController,
-        dp: PaddingValues? = null
+        navController: NavHostController
 ) {
     val uiState = settingViewModel.uiState.collectAsState().value
     val isLinearLayout = uiState.isLinearLayout
     val cachedNews by nhkViewModel.cachedValues.collectAsState()
     val state by nhkViewModel.state
-    val glModifier =
-            Modifier.fillMaxSize().let done@{
-                if (dp == null) return@done it
-                it.padding(dp)
-            }
+
     var showRangeModal by remember { mutableStateOf(false) }
     Scaffold(
-            modifier = glModifier,
+            bottomBar = { BottomBar(navController) },
             topBar = {
                 CenterAlignedTopAppBar(
                         colors =
