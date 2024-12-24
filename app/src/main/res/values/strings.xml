@@ -3,4 +3,6 @@
     <string name="top_bar_name">Android Dessert Release</string>
     <string name="grid_layout_toggle">Grid layout</string>
     <string name="linear_layout_toggle">Linear layout</string>
+    <string name="OK">OK</string>
+    <string name="Cancel">Cancel</string>
 </resources>

@@ -32,7 +32,7 @@ class UserPreferencesRepository(
             }
         }
         .map { preferences ->
-            preferences[IS_LINEAR_LAYOUT] ?: true
+            preferences[IS_LINEAR_LAYOUT] != false
         }
 
     suspend fun saveLayoutPreference(isLinearLayout: Boolean) {

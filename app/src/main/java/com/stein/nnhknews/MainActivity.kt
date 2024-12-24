@@ -128,7 +128,6 @@ fun MainView(htmlModel: NhkHtmlModel, upNavController: NavHostController) {
 
     val settingsViewModel: DessertReleaseViewModel =
             viewModel(factory = AppViewModelProvider.Factory)
-    // NOTE: just hack it now
     MaterialTheme {
         Scaffold(bottomBar = { BottomBar(navController) }) { padding ->
             NavHost(navController = navController, startDestination = BottomBarScreen.Home.route) {
@@ -265,7 +264,7 @@ fun DialogLicense(
                         TextButton(
                                 onClick = { onDismissRequest() },
                                 modifier = Modifier.padding(8.dp),
-                        ) { Text("Ok") }
+                        ) { Text(stringResource(R.string.OK)) }
                     }
                 }
             }
@@ -291,9 +290,9 @@ fun DateRangePickerModal(onDateRangeSelected: (Pair<Long?, Long?>) -> Unit, onDi
                             )
                             onDismiss()
                         }
-                ) { Text("OK") }
+                ) { Text(stringResource(R.string.OK)) }
             },
-            dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+            dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.Cancel)) } }
     ) {
         DateRangePicker(
                 state = dateRangePickerState,
