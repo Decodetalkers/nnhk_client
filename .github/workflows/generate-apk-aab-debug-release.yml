@@ -31,7 +31,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
 
       - run: gradle assembleRelease
-      - uses: ilharp/sign-android-release@v1 # Or use @nightly
+      - uses: ilharp/sign-android-release@v2 # Or use @nightly
         name: Sign app APK
         id: sign_app
         with:
