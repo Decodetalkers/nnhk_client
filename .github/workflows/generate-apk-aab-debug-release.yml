@@ -28,7 +28,7 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
 
       - run: gradle assembleRelease
       - uses: ilharp/sign-android-release@v2 # Or use @nightly
