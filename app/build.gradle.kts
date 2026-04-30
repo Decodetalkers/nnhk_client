@@ -3,7 +3,6 @@ plugins {
 
     alias(libs.plugins.jetbrains.kotlin.plugin.serialization)
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
     // id 'com.google.devtools.ksp' version '1.9.23-1.0.19' apply true
     // id "com.google.devtools.ksp" apply true
     alias(libs.plugins.google.devtools.ksp) apply true
@@ -11,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.stein.nnhknews"
-    compileSdk = 35
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.stein.nnhknews"
@@ -40,7 +39,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions { jvmTarget = JavaVersion.VERSION_17.toString() }
     buildFeatures { compose = true }
 }
 

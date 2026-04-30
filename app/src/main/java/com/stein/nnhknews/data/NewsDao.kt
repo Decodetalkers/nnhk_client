@@ -9,7 +9,10 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NewsDao {
-    @Query("SELECT * from news ORDER BY title ASC") fun getAllNews(): Flow<List<NhkNews>>
-    @Query("DELETE FROM news") fun clearAllData(): Int
-    @Insert(onConflict = OnConflictStrategy.IGNORE) fun insertNews(vararg news: NhkNews)
+    @Query("SELECT * from news ORDER BY title ASC")
+    fun getAllNews(): Flow<List<NhkNews>>
+    @Query("DELETE FROM news")
+    fun clearAllData(): Int
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertNews(vararg news: NhkNews)
 }

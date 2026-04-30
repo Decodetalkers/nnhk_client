@@ -18,3 +18,5 @@ local.properties
 kls_database.db
 .kotlin
 /app/release
+.vscode
+workspace.json

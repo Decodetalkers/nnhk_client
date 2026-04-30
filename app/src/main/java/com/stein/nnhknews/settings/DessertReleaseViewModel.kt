@@ -31,27 +31,27 @@ import kotlinx.coroutines.runBlocking
  * View model of Dessert Release components
  */
 class DessertReleaseViewModel(private val userPreferencesRepository: UserPreferencesRepository) :
-        ViewModel() {
+    ViewModel() {
     // UI states access for various [DessertReleaseUiState]
     val uiState: StateFlow<DessertReleaseUiState> =
-            userPreferencesRepository
-                    .isLinearLayout
-                    .map { isLinearLayout -> DessertReleaseUiState(isLinearLayout) }
-                    .stateIn(
-                            scope = viewModelScope,
-                            // Flow is set to emits value for when app is on the foreground
-                            // 5 seconds stop delay is added to ensure it flows continuously
-                            // for cases such as configuration change
-                            started = SharingStarted.WhileSubscribed(5_000),
-                            initialValue =
-                                    runBlocking {
-                                        DessertReleaseUiState(
-                                                isLinearLayout =
-                                                        userPreferencesRepository.isLinearLayout
-                                                                .first()
-                                        )
-                                    }
-                    )
+        userPreferencesRepository
+            .isLinearLayout
+            .map { isLinearLayout -> DessertReleaseUiState(isLinearLayout) }
+            .stateIn(
+                scope = viewModelScope,
+                // Flow is set to emits value for when app is on the foreground
+                // 5 seconds stop delay is added to ensure it flows continuously
+                // for cases such as configuration change
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue =
+                    runBlocking {
+                        DessertReleaseUiState(
+                            isLinearLayout =
+                                userPreferencesRepository.isLinearLayout
+                                    .first()
+                        )
+                    }
+            )
 
     /*
      * [selectLayout] change the layout and icons accordingly and
@@ -61,13 +61,14 @@ class DessertReleaseViewModel(private val userPreferencesRepository: UserPrefere
         viewModelScope.launch { userPreferencesRepository.saveLayoutPreference(isLinearLayout) }
     }
 }
+
 /*
  * Data class containing various UI States for Dessert Release screens
  */
 data class DessertReleaseUiState(
-        val isLinearLayout: Boolean = true,
-        val toggleContentDescription: Int =
-                if (isLinearLayout) R.string.grid_layout_toggle else R.string.linear_layout_toggle,
-        val toggleIcon: Int =
-                if (isLinearLayout) R.drawable.ic_grid_layout else R.drawable.ic_linear_layout
+    val isLinearLayout: Boolean = true,
+    val toggleContentDescription: Int =
+        if (isLinearLayout) R.string.grid_layout_toggle else R.string.linear_layout_toggle,
+    val toggleIcon: Int =
+        if (isLinearLayout) R.drawable.ic_grid_layout else R.drawable.ic_linear_layout
 )
