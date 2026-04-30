@@ -10,7 +10,7 @@ import com.stein.nnhknews.data.UserPreferencesRepository
 
 private const val LAYOUT_PREFERENCE_NAME = "layout_preferences"
 private val Context.dataStore: DataStore<Preferences> by
-        preferencesDataStore(name = LAYOUT_PREFERENCE_NAME)
+preferencesDataStore(name = LAYOUT_PREFERENCE_NAME)
 
 class InventoryApplication : Application() {
 

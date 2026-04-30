@@ -5,7 +5,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import okhttp3.*
 
-val nhkFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+val nhkFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")!!
 
 fun requestNews(begin: LocalDateTime, end: LocalDateTime): Request {
     val yesterdayIso = begin.atOffset(ZoneOffset.UTC).format(nhkFormatter)

@@ -97,9 +97,9 @@ class MainActivity : ComponentActivity() {
             MahoyinkuimaTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        // color = MaterialTheme.colorScheme.background
-                        ) { OverAllView() }
+                    modifier = Modifier.fillMaxSize(),
+                    // color = MaterialTheme.colorScheme.background
+                ) { OverAllView() }
             }
         }
     }
@@ -112,8 +112,8 @@ fun OverAllView() {
     val navController = rememberNavController()
 
     NavHost(
-            navController = navController,
-            startDestination = OverViewScreen.Main.route,
+        navController = navController,
+        startDestination = OverViewScreen.Main.route,
     ) {
         composable(OverViewScreen.Main.route) { MainView(nhkHtml, navController) }
         composable(OverViewScreen.News.route) { WebViewScreen(nhkHtml, navController) }
@@ -126,16 +126,16 @@ fun MainView(htmlModel: NhkHtmlModel, upNavController: NavHostController) {
     val nhkViewModel: NhkViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
     val settingsViewModel: DessertReleaseViewModel =
-            viewModel(factory = AppViewModelProvider.Factory)
+        viewModel(factory = AppViewModelProvider.Factory)
 
     NavHost(navController = navController, startDestination = BottomBarScreen.Home.route) {
         composable(BottomBarScreen.Home.route) {
             NhkNewsList(
-                    settingViewModel = settingsViewModel,
-                    nhkViewModel = nhkViewModel,
-                    htmlModel = htmlModel,
-                    upNavController = upNavController,
-                    navController = navController
+                settingViewModel = settingsViewModel,
+                nhkViewModel = nhkViewModel,
+                htmlModel = htmlModel,
+                upNavController = upNavController,
+                navController = navController
             )
         }
 
@@ -151,51 +151,51 @@ fun AboutPage(navController: NavHostController) {
     val remoteUrl = "https://github.com/Decodetalkers/nnhk_client"
 
     Scaffold(
-            topBar = {
-                TopAppBar(
-                        title = {
-                            Text(
-                                    text = "About",
-                                    modifier = Modifier.fillMaxWidth().padding(all = 10.dp),
-                                    fontSize = 30.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    textAlign = TextAlign.Right
-                            )
-                        }
-                )
-            },
-            bottomBar = { BottomBar(navController) }
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "About",
+                        modifier = Modifier.fillMaxWidth().padding(all = 10.dp),
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Right
+                    )
+                }
+            )
+        },
+        bottomBar = { BottomBar(navController) }
     ) { padding ->
         Column(
-                modifier = Modifier.padding(padding).fillMaxHeight().padding(all = 30.dp),
+            modifier = Modifier.padding(padding).fillMaxHeight().padding(all = 30.dp),
         ) {
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                    modifier = Modifier.fillMaxWidth().padding(start = 10.dp),
-                    text = "nnhknews -> A nhk news client made with jetpack compose",
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth().padding(start = 10.dp),
+                text = "nnhknews -> A nhk news client made with jetpack compose",
+                color = MaterialTheme.colorScheme.primary,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.height(16.dp))
             Column(
-                    modifier =
-                            Modifier.clickable { uriHandler.openUri(remoteUrl) }
-                                    .fillMaxWidth()
-                                    .padding(10.dp)
+                modifier =
+                    Modifier.clickable { uriHandler.openUri(remoteUrl) }
+                        .fillMaxWidth()
+                        .padding(10.dp)
             ) {
                 Text(text = "Github", fontSize = 17.sp, fontWeight = FontWeight.ExtraBold)
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                        text = "View the source code",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Medium
+                    text = "View the source code",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Medium
                 )
             }
             Spacer(modifier = Modifier.height(6.dp))
             Column(
-                    modifier =
-                            Modifier.clickable { showDialog = true }.fillMaxWidth().padding(10.dp)
+                modifier =
+                    Modifier.clickable { showDialog = true }.fillMaxWidth().padding(10.dp)
             ) {
                 Text(text = "License", fontSize = 17.sp, fontWeight = FontWeight.ExtraBold)
                 Spacer(modifier = Modifier.width(4.dp))
@@ -209,7 +209,7 @@ fun AboutPage(navController: NavHostController) {
 }
 
 const val MITLICENSE =
-        """
+    """
 MIT License
 Copyright (c) 2023 Decodetalkers
 
@@ -234,28 +234,28 @@ SOFTWARE.
 
 @Composable
 fun DialogLicense(
-        onDismissRequest: () -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
-                modifier = Modifier.fillMaxWidth().height(475.dp).padding(16.dp),
-                shape = RoundedCornerShape(16.dp),
+            modifier = Modifier.fillMaxWidth().height(475.dp).padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
         ) {
             LazyColumn {
                 item {
                     Text(
-                            text = MITLICENSE,
-                            modifier = Modifier.padding(16.dp),
+                        text = MITLICENSE,
+                        modifier = Modifier.padding(16.dp),
                     )
                 }
                 item {
                     Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
                     ) {
                         TextButton(
-                                onClick = { onDismissRequest() },
-                                modifier = Modifier.padding(8.dp),
+                            onClick = { onDismissRequest() },
+                            modifier = Modifier.padding(8.dp),
                         ) { Text(stringResource(R.string.OK)) }
                     }
                 }
@@ -270,29 +270,29 @@ fun DateRangePickerModal(onDateRangeSelected: (Pair<Long?, Long?>) -> Unit, onDi
     val dateRangePickerState = rememberDateRangePickerState()
 
     DatePickerDialog(
-            onDismissRequest = onDismiss,
-            confirmButton = {
-                TextButton(
-                        onClick = {
-                            onDateRangeSelected(
-                                    Pair(
-                                            dateRangePickerState.selectedStartDateMillis,
-                                            dateRangePickerState.selectedEndDateMillis
-                                    )
-                            )
-                            onDismiss()
-                        }
-                ) { Text(stringResource(R.string.OK)) }
-            },
-            dismissButton = {
-                TextButton(onClick = onDismiss) { Text(stringResource(R.string.Cancel)) }
-            }
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onDateRangeSelected(
+                        Pair(
+                            dateRangePickerState.selectedStartDateMillis,
+                            dateRangePickerState.selectedEndDateMillis
+                        )
+                    )
+                    onDismiss()
+                }
+            ) { Text(stringResource(R.string.OK)) }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.Cancel)) }
+        }
     ) {
         DateRangePicker(
-                state = dateRangePickerState,
-                title = {},
-                showModeToggle = false,
-                modifier = Modifier.fillMaxWidth().height(500.dp)
+            state = dateRangePickerState,
+            title = {},
+            showModeToggle = false,
+            modifier = Modifier.fillMaxWidth().height(500.dp)
         )
     }
 }
@@ -300,17 +300,17 @@ fun DateRangePickerModal(onDateRangeSelected: (Pair<Long?, Long?>) -> Unit, onDi
 @Composable
 fun NetworkError(padding: PaddingValues = PaddingValues(all = 0.dp), error: String) {
     Column(
-            modifier = Modifier.padding(padding).fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.padding(padding).fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = error, fontWeight = FontWeight.Bold, fontSize = 30.sp, color = Color.DarkGray)
 
         Image(
-                painterResource(R.drawable.error),
-                contentDescription = "",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.width(30.dp).height(30.dp)
+            painterResource(R.drawable.error),
+            contentDescription = "",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.width(30.dp).height(30.dp)
         )
     }
 }
@@ -323,11 +323,11 @@ fun NetworkErrorPreview() {
 
 @Composable
 fun NewsCard(
-        modifier: Modifier,
-        htmlModel: NhkHtmlModel,
-        upNavController: NavHostController,
-        isLinearLayout: Boolean,
-        news: List<NhkNews>
+    modifier: Modifier,
+    htmlModel: NhkHtmlModel,
+    upNavController: NavHostController,
+    isLinearLayout: Boolean,
+    news: List<NhkNews>
 ) {
 
     if (isLinearLayout) {
@@ -342,12 +342,12 @@ fun NewsCard(
         }
     } else {
         LazyVerticalGrid(
-                modifier = modifier,
-                columns = GridCells.Fixed(2),
-                verticalArrangement =
-                        Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
-                horizontalArrangement =
-                        Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
+            modifier = modifier,
+            columns = GridCells.Fixed(2),
+            verticalArrangement =
+                Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+            horizontalArrangement =
+                Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
         ) {
             items(news) { data ->
                 data.NewsViewColumn {
@@ -363,11 +363,11 @@ fun NewsCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NhkNewsList(
-        settingViewModel: DessertReleaseViewModel,
-        nhkViewModel: NhkViewModel,
-        htmlModel: NhkHtmlModel,
-        upNavController: NavHostController,
-        navController: NavHostController
+    settingViewModel: DessertReleaseViewModel,
+    nhkViewModel: NhkViewModel,
+    htmlModel: NhkHtmlModel,
+    upNavController: NavHostController,
+    navController: NavHostController
 ) {
     val uiState = settingViewModel.uiState.collectAsState().value
     val isLinearLayout = uiState.isLinearLayout
@@ -376,97 +376,92 @@ fun NhkNewsList(
 
     var showRangeModal by remember { mutableStateOf(false) }
     Scaffold(
-            bottomBar = { BottomBar(navController) },
-            topBar = {
-                CenterAlignedTopAppBar(
-                        colors =
-                                TopAppBarDefaults.centerAlignedTopAppBarColors(
-                                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                        titleContentColor = MaterialTheme.colorScheme.primary,
-                                ),
-                        title = {
-                            Text(
-                                    nhkViewModel.modelTitle,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                            )
-                        },
-                        actions = {
-                            IconButton(
-                                    onClick = { settingViewModel.selectLayout(!isLinearLayout) }
-                            ) {
-                                Icon(
-                                        painter = painterResource(uiState.toggleIcon),
-                                        contentDescription =
-                                                stringResource(uiState.toggleContentDescription),
-                                        tint = MaterialTheme.colorScheme.onBackground
-                                )
-                            }
-                            IconButton(onClick = { showRangeModal = true }) {
-                                Icon(
-                                        painter = painterResource(R.drawable.calendar),
-                                        contentDescription = "Localized description",
-                                        modifier = Modifier.size(width = 25.dp, height = 25.dp)
-                                )
-                            }
-                        }
-                )
-            }
+        bottomBar = { BottomBar(navController) },
+        topBar = {
+            CenterAlignedTopAppBar(
+                colors =
+                    TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        titleContentColor = MaterialTheme.colorScheme.primary,
+                    ),
+                title = {
+                    Text(
+                        nhkViewModel.modelTitle,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
+                actions = {
+                    IconButton(
+                        onClick = { settingViewModel.selectLayout(!isLinearLayout) }
+                    ) {
+                        Icon(
+                            painter = painterResource(uiState.toggleIcon),
+                            contentDescription =
+                                stringResource(uiState.toggleContentDescription),
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+                    IconButton(onClick = { showRangeModal = true }) {
+                        Icon(
+                            painter = painterResource(R.drawable.calendar),
+                            contentDescription = "Localized description",
+                            modifier = Modifier.size(width = 25.dp, height = 25.dp)
+                        )
+                    }
+                }
+            )
+        }
     ) { padding ->
         when (val smartCastData = state) {
             is Resource.Success ->
-                    NewsCard(
-                            modifier = Modifier.padding(padding),
-                            news = smartCastData.data,
-                            htmlModel = htmlModel,
-                            isLinearLayout = isLinearLayout,
-                            upNavController = upNavController
-                    )
+                NewsCard(
+                    modifier = Modifier.padding(padding),
+                    news = smartCastData.data,
+                    htmlModel = htmlModel,
+                    isLinearLayout = isLinearLayout,
+                    upNavController = upNavController
+                )
+
             is Resource.Failure ->
-                    if (cachedNews.isEmpty()) {
-                        Column(
-                                modifier = Modifier.padding(padding),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                        ) { Text(text = smartCastData.message, fontWeight = FontWeight.Bold) }
-                    } else {
-                        NewsCard(
-                                modifier = Modifier.padding(padding),
-                                news = cachedNews,
-                                htmlModel = htmlModel,
-                                isLinearLayout = isLinearLayout,
-                                upNavController = upNavController
-                        )
-                    }
-            else ->
-                    CircularProgressIndicator(
-                            modifier = Modifier.width(64.dp),
-                            color = MaterialTheme.colorScheme.primary,
-                            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                if (cachedNews.isEmpty()) {
+                    Column(
+                        modifier = Modifier.padding(padding),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) { Text(text = smartCastData.message, fontWeight = FontWeight.Bold) }
+                } else {
+                    NewsCard(
+                        modifier = Modifier.padding(padding),
+                        news = cachedNews,
+                        htmlModel = htmlModel,
+                        isLinearLayout = isLinearLayout,
+                        upNavController = upNavController
                     )
+                }
         }
     }
     if (showRangeModal) {
         DateRangePickerModal(
-                onDateRangeSelected = date@{
-                            val (end_l, start_l) = it
+            onDateRangeSelected = date@{
+                val (endL, startL) = it
 
-                            if (start_l == null || end_l == null) return@date
-                            var start =
-                                    LocalDateTime.ofInstant(
-                                            Instant.ofEpochMilli(start_l),
-                                            ZoneId.systemDefault()
-                                    )
-                            val end =
-                                    LocalDateTime.ofInstant(
-                                            Instant.ofEpochMilli(end_l),
-                                            ZoneId.systemDefault()
-                                    )
-                            nhkViewModel.clearState()
-                            nhkViewModel.syncNews(start, end)
-                            showRangeModal = false
-                        },
-                onDismiss = { showRangeModal = false }
+                if (startL == null || endL == null) return@date
+                var start =
+                    LocalDateTime.ofInstant(
+                        Instant.ofEpochMilli(startL),
+                        ZoneId.systemDefault()
+                    )
+                val end =
+                    LocalDateTime.ofInstant(
+                        Instant.ofEpochMilli(endL),
+                        ZoneId.systemDefault()
+                    )
+                nhkViewModel.clearState()
+                nhkViewModel.syncNews(start, end)
+                showRangeModal = false
+            },
+            onDismiss = { showRangeModal = false }
         )
     }
 }
@@ -481,94 +476,94 @@ fun WebViewScreen(nhkHtml: NhkHtmlModel, upNavController: NavHostController) {
     var playIcon by remember { mutableIntStateOf(R.drawable.play) }
 
     Scaffold(
-            floatingActionButton = {
-                FloatingActionButton(
-                        onClick = play@{
-                                    if (audioUrl == null) return@play
-                                    if (mediaPlayer.isPlaying) {
-                                        playIcon = R.drawable.play
-                                        mediaPlayer.stop()
-                                        mediaPlayer.reset()
-                                        return@play
-                                    }
-                                    mediaPlayer.setAudioAttributes(
-                                            AudioAttributes.Builder()
-                                                    .setContentType(
-                                                            AudioAttributes.CONTENT_TYPE_MUSIC
-                                                    )
-                                                    .build()
-                                    )
-
-                                    // on below line we are running a try and catch block
-                                    // for our media player.
-                                    try {
-                                        // on below line we are setting audio source
-                                        // as audio url on below line.
-                                        mediaPlayer.setDataSource(audioUrl)
-
-                                        // on below line we are preparing
-                                        // our media player.
-                                        mediaPlayer.prepare()
-
-                                        // on below line we are starting
-                                        // our media player.
-                                        mediaPlayer.start()
-                                    } catch (e: Exception) {
-
-                                        // on below line we are
-                                        // handling our exception.
-                                        e.printStackTrace()
-                                    }
-                                    playIcon = R.drawable.pause
-                                }
-                ) {
-                    Icon(
-                            painter = painterResource(playIcon),
-                            contentDescription = "Floating action button.",
-                            modifier = Modifier.size(width = 30.dp, height = 30.dp)
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = play@{
+                    if (audioUrl == null) return@play
+                    if (mediaPlayer.isPlaying) {
+                        playIcon = R.drawable.play
+                        mediaPlayer.stop()
+                        mediaPlayer.reset()
+                        return@play
+                    }
+                    mediaPlayer.setAudioAttributes(
+                        AudioAttributes.Builder()
+                            .setContentType(
+                                AudioAttributes.CONTENT_TYPE_MUSIC
+                            )
+                            .build()
                     )
+
+                    // on below line we are running a try and catch block
+                    // for our media player.
+                    try {
+                        // on below line we are setting audio source
+                        // as audio url on below line.
+                        mediaPlayer.setDataSource(audioUrl)
+
+                        // on below line we are preparing
+                        // our media player.
+                        mediaPlayer.prepare()
+
+                        // on below line we are starting
+                        // our media player.
+                        mediaPlayer.start()
+                    } catch (e: Exception) {
+
+                        // on below line we are
+                        // handling our exception.
+                        e.printStackTrace()
+                    }
+                    playIcon = R.drawable.pause
                 }
-            },
-            topBar = {
-                TopAppBar(
-                        colors =
-                                TopAppBarDefaults.topAppBarColors(
-                                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                        titleContentColor = MaterialTheme.colorScheme.primary,
-                                ),
-                        title = { Text(text = title) },
-                        navigationIcon = {
-                            IconButton(
-                                    onClick = {
-                                        mediaPlayer.stop()
-                                        mediaPlayer.reset()
-                                        mediaPlayer.release()
-                                        upNavController.navigateUp()
-                                    }
-                            ) {
-                                Icon(
-                                    painter = painterResource(R.drawable.arrow_back),
-                                    contentDescription = "Localized description"
-                                )
-                            }
-                        },
+            ) {
+                Icon(
+                    painter = painterResource(playIcon),
+                    contentDescription = "Floating action button.",
+                    modifier = Modifier.size(width = 30.dp, height = 30.dp)
                 )
             }
+        },
+        topBar = {
+            TopAppBar(
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        titleContentColor = MaterialTheme.colorScheme.primary,
+                    ),
+                title = { Text(text = title) },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            mediaPlayer.stop()
+                            mediaPlayer.reset()
+                            mediaPlayer.release()
+                            upNavController.navigateUp()
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.arrow_back),
+                            contentDescription = "Localized description"
+                        )
+                    }
+                },
+            )
+        }
     ) { padding ->
         Box(modifier = Modifier.padding(padding).fillMaxSize()) {
             AndroidView(
-                    factory = {
-                        WebView(it).apply {
-                            layoutParams =
-                                    ViewGroup.LayoutParams(
-                                            ViewGroup.LayoutParams.MATCH_PARENT,
-                                            ViewGroup.LayoutParams.MATCH_PARENT
-                                    )
-                        }
-                    },
-                    update = {
-                        it.loadDataWithBaseURL(null, htmlString, "text/html", "utf-8", null)
+                factory = {
+                    WebView(it).apply {
+                        layoutParams =
+                            ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.MATCH_PARENT
+                            )
                     }
+                },
+                update = {
+                    it.loadDataWithBaseURL(null, htmlString, "text/html", "utf-8", null)
+                }
             )
         }
     }
@@ -576,25 +571,25 @@ fun WebViewScreen(nhkHtml: NhkHtmlModel, upNavController: NavHostController) {
 
 @Composable
 private fun BottomBar(
-        navController: NavHostController,
+    navController: NavHostController,
 ) {
     var selectedDestination by remember { mutableIntStateOf(0) }
 
     val screens = listOf(BottomBarScreen.Home, BottomBarScreen.About)
 
     val callback =
-            NavController.OnDestinationChangedListener end@{ _, destination, _ ->
-                if (destination.route == null) return@end
-                val index = screens.withIndex().first { destination.route == it.value.route }.index
-                if (index >= 0) selectedDestination = index
-            }
+        NavController.OnDestinationChangedListener end@{ _, destination, _ ->
+            if (destination.route == null) return@end
+            val index = screens.withIndex().first { destination.route == it.value.route }.index
+            if (index >= 0) selectedDestination = index
+        }
     navController.addOnDestinationChangedListener(callback)
     NavigationBar {
         screens.forEachIndexed { index, screen ->
             AddItem(
-                    screen = screen,
-                    isSelected = index == selectedDestination,
-                    navController = navController
+                screen = screen,
+                isSelected = index == selectedDestination,
+                navController = navController
             )
         }
     }
@@ -602,20 +597,20 @@ private fun BottomBar(
 
 @Composable
 fun RowScope.AddItem(
-        screen: BottomBarScreen,
-        isSelected: Boolean,
-        navController: NavHostController
+    screen: BottomBarScreen,
+    isSelected: Boolean,
+    navController: NavHostController
 ) {
     NavigationBarItem(
-            label = { Text(text = stringResource(screen.title)) },
-            icon = {
-                Icon(
-                        painter = painterResource(screen.icon),
-                        contentDescription = "Navigation Icon",
-                        modifier = Modifier.size(width = 25.dp, height = 25.dp)
-                )
-            },
-            selected = isSelected,
-            onClick = { navController.navigate(screen.route) }
+        label = { Text(text = stringResource(screen.title)) },
+        icon = {
+            Icon(
+                painter = painterResource(screen.icon),
+                contentDescription = "Navigation Icon",
+                modifier = Modifier.size(width = 25.dp, height = 25.dp)
+            )
+        },
+        selected = isSelected,
+        onClick = { navController.navigate(screen.route) }
     )
 }

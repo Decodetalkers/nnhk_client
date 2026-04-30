@@ -15,5 +15,5 @@ object AppViewModelProvider {
 }
 
 fun CreationExtras.inventoryApplication(): InventoryApplication =
-        (this[AndroidViewModelFactory.APPLICATION_KEY] as InventoryApplication)
+    (this[AndroidViewModelFactory.APPLICATION_KEY] as InventoryApplication)
 
