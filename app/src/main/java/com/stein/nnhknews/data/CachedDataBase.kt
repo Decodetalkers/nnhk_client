@@ -6,6 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.stein.nnhknews.nhk.NhkNews
 
+// TODO: add migrate later
+// https://developer.android.com/training/data-storage/room/migrating-db-versions
 /** Database class with a singleton Instance object. */
 @Database(entities = [NhkNews::class], version = 1, exportSchema = false)
 abstract class NewsDatabase : RoomDatabase() {
@@ -25,13 +27,6 @@ abstract class NewsDatabase : RoomDatabase() {
                         NewsDatabase::class.java,
                         "news_database"
                     )
-                        /**
-                         * Setting this option in your app's database builder means that
-                         * Room permanently deletes all data from the tables in your
-                         * database when it attempts to perform a migration with no defined
-                         * migration path.
-                         */
-                        .fallbackToDestructiveMigration()
                         .build()
                         .also { Instance = it }
                 }
