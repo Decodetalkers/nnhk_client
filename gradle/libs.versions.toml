@@ -1,6 +1,6 @@
 [versions]
 compose_version = "1.11.0"
-kotlin = "2.3.21"
+kotlin = "2.4.0"
 agp = "9.2.0"
 ksp = "2.3.5"
 nav = "2.9.8"
